@@ -7,8 +7,9 @@ import android.widget.EditText;
 import butterknife.BindView;
 import com.alpha.apiautobot.bot.BotManager;
 import com.alpha.apiautobot.bot.BotWatchKuCoinToBinance;
+import com.alpha.apiautobot.platform.huobipro.HuobiPro;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.binance_key_et)
     EditText binance_key_et;
@@ -21,6 +22,8 @@ public class MainActivity extends FragmentActivity {
 
     @BindView(R.id.bitfinex_secret_et)
     EditText bitfinex_secret_et;
+
+    private HuobiPro huobiPro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

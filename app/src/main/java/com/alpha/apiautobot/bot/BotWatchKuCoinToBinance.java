@@ -1,11 +1,15 @@
 package com.alpha.apiautobot.bot;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.util.Log;
 import com.alpha.apiautobot.ApiAutoBotApplication;
 import com.alpha.apiautobot.domain.dao.kucoin.Market;
 import com.alpha.apiautobot.domain.dao.kucoin.MarketDao;
 import com.alpha.apiautobot.platform.binance.Binance;
 import com.alpha.apiautobot.platform.kucoin.KuCoin;
+import com.alpha.apiautobot.utils.NotificationUtil;
 import com.alpha.apiautobot.utils.Util;
 
 import java.util.*;
@@ -40,7 +44,7 @@ public class BotWatchKuCoinToBinance {
             public void run() {
                 kuCoin.getMarketList();
             }
-        }, 15 * 1000, 15 * 1000);
+        }, 0 * 1000, 1000);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -92,6 +96,7 @@ public class BotWatchKuCoinToBinance {
                 if (willList.size() > 0) {
                     for (String coin : willList) {
                         Log.i(logTag, "Binance will list 【"+coin+"】that has listed on KuCoin");
+                        NotificationUtil.notification("上币公告", "Binance平台将上新币:" + coin);
                     }
                 } else {
                     Log.i(logTag, "Binance will list empty");
@@ -103,4 +108,5 @@ public class BotWatchKuCoinToBinance {
             Log.i(logTag, "Binance coin uniqueList or willList empty");
         }
     }
+
 }

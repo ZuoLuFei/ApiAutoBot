@@ -8,7 +8,9 @@ import com.alpha.apiautobot.domain.dao.kucoin.MarketDao;
 import com.alpha.apiautobot.domain.dao.kucoin.TransactionOrder;
 import com.alpha.apiautobot.domain.dao.kucoin.TransactionOrderDao;
 import com.alpha.apiautobot.platform.binance.Binance;
+import com.alpha.apiautobot.platform.huobipro.HuobiPro;
 import com.alpha.apiautobot.platform.kucoin.KuCoin;
+import com.alpha.apiautobot.utils.Util;
 
 import java.util.List;
 import java.util.Timer;
@@ -32,6 +34,11 @@ public class BotManager {
         kuCoin.initRestful();
         monitoringRapidRiseAndFall();
         monitoringBigCapital();
+
+
+        //启动火币
+        HuobiPro huobiPro = new HuobiPro();
+        huobiPro.connection();
     }
 
     /**
@@ -44,13 +51,13 @@ public class BotManager {
             public void run() {
                 kuCoin.getMarketList();
             }
-        }, 5 * 1000, 5 * 1000);
+        }, 0 * 1000, 1000);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 RapidRiseAndFall();
             }
-        }, 15 * 1000, 15 * 1000);
+        }, 10 * 1000, 5*1000);
     }
 
     /**
@@ -88,12 +95,14 @@ public class BotManager {
      */
     public void monitoringBigCapital() {
         timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                kuCoin.getTick();
-            }
-        }, 5 * 1000, 5 * 1000);
+        for(int i=0;i<Util.getNumCores();i++){
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    kuCoin.getTick();
+                }
+            }, 0 * 1000, 1000);
+        }
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
